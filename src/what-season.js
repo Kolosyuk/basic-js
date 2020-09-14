@@ -1,9 +1,9 @@
 const CustomError = require("../extensions/custom-error");
 
 module.exports = function getSeason(date) {
-  if (date === null || date === undefined) { return "Unable to determine the time of year!" }
+  const options = ["winter", "spring", "summer", "autumn", "Unable to determine the time of year!"]
+  if (date === null || date === undefined) { return options[4] }
   let strDate = date.toDateString();
-  let options = ["winter", "spring", "summer", "autumn", "Unable to determine the time of year!"]
   switch (strDate.substring(4, 7)) {
     case 'Jan':
     case 'Feb':
