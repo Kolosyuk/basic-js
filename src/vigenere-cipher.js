@@ -6,45 +6,41 @@ class VigenereCipheringMachine {
   }
   encrypt(message, key) {
     if (message == undefined || key == undefined) throw new Error('ERROR!!')
+    let upMessage = [...message.toUpperCase()];
     let arrKeyCodeNewLength = 0;
-    let arrKeyCode = key.split('').map((item) => {
-      return item = item.toUpperCase().charCodeAt() - 65
-    });
-    message = message.split('').map((item) => {
-      if (!/^[a-z]$/gi.test(item)) {
-        return item = item.charCodeAt()
+    let arrKeyCode = key.toUpperCase().split('').map((item) => item.charCodeAt() - 'A'.charCodeAt());
+    upMessage = upMessage.map((item) => {
+      if (!/^[A-Z]/.test(item)) {
+        return item
       } else {
         if (arrKeyCodeNewLength === arrKeyCode.length) arrKeyCodeNewLength = 0
-        item = item.toUpperCase().charCodeAt() + arrKeyCode[arrKeyCodeNewLength]
+        item = String.fromCharCode((item.charCodeAt() + arrKeyCode[arrKeyCodeNewLength]) <= 'Z'.charCodeAt() ?
+          item.charCodeAt() + arrKeyCode[arrKeyCodeNewLength] :
+          item.charCodeAt() + arrKeyCode[arrKeyCodeNewLength] - 26)
         arrKeyCodeNewLength++;
         return item
       }
-    }).map((item) => {
-      item = !(item > 90) ? item : item - 26
-      return String.fromCharCode(item)
-    });
-    return this.isStraight ? message.join('') : message.reverse().join('')
+    })
+    return this.isStraight ? upMessage.join('') : upMessage.reverse().join('')
   }
   decrypt(message, key) {
     if (message == undefined || key == undefined) throw new Error('ERROR!!')
+    let upMessage = [...message.toUpperCase()];
     let arrKeyCodeNewLength = 0;
-    let arrKeyCode = key.split('').map((item) => {
-      return item = item.toUpperCase().charCodeAt() - 65
-    });
-    message = message.split('').map((item) => {
-      if (!/^[a-z]$/gi.test(item)) {
-        return item = item.charCodeAt() + 200
+    let arrKeyCode = key.split('').map((item) => item.toUpperCase().charCodeAt() - 'A'.charCodeAt());
+    upMessage = upMessage.map((item) => {
+      if (!/^[A-Z]/.test(item)) {
+        return item
       } else {
         if (arrKeyCodeNewLength === arrKeyCode.length) arrKeyCodeNewLength = 0
-        item = item.toUpperCase().charCodeAt() - arrKeyCode[arrKeyCodeNewLength]
+        item = String.fromCharCode(!(item.charCodeAt() - arrKeyCode[arrKeyCodeNewLength] < 'A'.charCodeAt()) ?
+          item.charCodeAt() - arrKeyCode[arrKeyCodeNewLength] :
+          item.charCodeAt() - arrKeyCode[arrKeyCodeNewLength] + 26)
         arrKeyCodeNewLength++;
         return item
       }
-    }).map((item) => {
-      item = (item < 65) ? item + 26 : item > 200 ? item - 200 : item
-      return String.fromCharCode(item)
-    });
-    return this.isStraight ? message.join('') : message.reverse().join('')
+    })
+    return this.isStraight ? upMessage.join('') : upMessage.reverse().join('')
   }
 }
 
